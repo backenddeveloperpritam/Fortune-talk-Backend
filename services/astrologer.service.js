@@ -85,8 +85,7 @@ const addNewAstrologer = async (body, files) => {
     const skillArray = Array.isArray(skill) ? skill : [];
     const remediesArray = Array.isArray(remedies) ? remedies : [];
     const expertiseArray = Array.isArray(expertise) ? expertise : [];
-    const languageArray = Array.isArray(language) ? language : [];
-console.log(languageArray);
+    
     // File upload handling
     const profileImagePath = files.profileImage ? files.profileImage[0].path : "";
     const idProofImagePath = files.idProofImage ? files.idProofImage[0].path : "";
@@ -118,7 +117,7 @@ console.log(languageArray);
         gender,
         dateOfBirth,
         experience,
-        language: languageArray,
+        language,
         address,
         currencyType,
         currencyValue,
