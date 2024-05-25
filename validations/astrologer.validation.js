@@ -81,26 +81,14 @@ const updateAstrologer = {
 
 const loginAstrologer = {
     body: Joi.object().keys({
-<<<<<<< HEAD
-        email: Joi.string().email().allow(''),
-        phoneNumber: Joi.string().allow(''),
-        password: Joi.string().required(),
-        fcmToken: Joi.string().required()
-    }).xor('email', 'phoneNumber').with('password', 'fcmToken').required()
-=======
         email: Joi.string().email().required(),
         password: Joi.string().required(),
         fcmToken: Joi.string().required()
     })
->>>>>>> 521c435031bb9479ac3b4beb05fffd3768c7d6d2
 };
 
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 521c435031bb9479ac3b4beb05fffd3768c7d6d2
 export {
     searchAstrologer,
     getAstrologerId,
