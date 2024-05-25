@@ -1,10 +1,10 @@
 import ApiError from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken"
-import { Customers } from "../models/customer/Customers.js";
+import Astrologer from "../models/adminModel/Astrologer.js";
 
 export const verifyJWT = asyncHandler(async (req, _, next) => {
-    try {
+    // try {
         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
 
         // console.log(token);
@@ -14,17 +14,17 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
 
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
 
-        const user = await User.findById(decodedToken?._id).select("-password -refreshToken")
+        const astrologer = await Astrologer.findById(decodedToken?._id).select("-password -refreshToken")
 
-        if (!user) {
+        if (!astrologer) {
 
             throw new ApiError(401, "Invalid Access Token")
         }
 
-        req.user = user;
+        req.astrologer = astrologer;
         next()
-    } catch (error) {
-        throw new ApiError(401, error?.message || "Invalid access token")
-    }
+    // } catch (error) {
+    //     throw new ApiError(401, error?.message || "Invalid access token")
+    // }
 
 })

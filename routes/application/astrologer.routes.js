@@ -11,6 +11,10 @@ router.post(
     validate(astrologerValidation.loginAstrologer),
     astrologerController.astrologerLogin
 );
+router.post(
+    "/logout-astrologer", verifyJWT,
+    astrologerController.logoutAstrologer
+);
 
 router.get(
     "/astrologers",

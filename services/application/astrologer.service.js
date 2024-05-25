@@ -25,6 +25,21 @@ const loginAstrologer = async (email, password) => {
 
 };
 
+const logoutAstrologer = async (astrologerId) => {
+    const astrologer = await Astrologer.findByIdAndUpdate(
+        astrologerId,
+        {
+            $unset: {
+                refreshToken: 1 // this removes the field from document
+            }
+        },
+        {
+            new: true
+        }
+    )
+    return astrologer;
+};
+
 const getAstrologerById = async (id) => {
     const astrologer = await Astrologer.findOne({ _id: id }).select("-password -refreshToken");
     return astrologer;
@@ -32,4 +47,4 @@ const getAstrologerById = async (id) => {
 
 
 
-export { getAstrologer, loginAstrologer, getAstrologerById };
+export { getAstrologer, loginAstrologer, logoutAstrologer, getAstrologerById };
