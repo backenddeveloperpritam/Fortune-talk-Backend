@@ -2,6 +2,21 @@ import ApiError from "../../utils/ApiError.js";
 import Astrologer from "../../models/adminModel/Astrologer.js";
 
 
+const getAstrologer = async (title) => {
+    try {
+        console.log("title", title)
+        const titleMatch = { "displayName": { "$regex": title, "$options": "i" } };
+
+        const astrologers = await Astrologer.find({
+            ...titleMatch,
+        });
+
+        return astrologers;
+    } catch (error) {
+        throw new ApiError(500, "Internal Server Error - Astrologers Not Fetched");
+    }
+};
+
 const loginAstrologer = async (email, password) => {
 
     const astrologer = await Astrologer.findOne({ email });
@@ -17,4 +32,4 @@ const getAstrologerById = async (id) => {
 
 
 
-export { loginAstrologer, getAstrologerById };
+export { getAstrologer, loginAstrologer, getAstrologerById };

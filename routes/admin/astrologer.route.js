@@ -19,13 +19,22 @@ router.get(
     astrologerController.getAstrologerById
 );
 
-router.post("/astrologers",
+router.post("/add-astrologers",
     validate(astrologerValidation.addNewAstrologer),
     upload.fields([
         {
-            name: "avatar",
+            name: "profileImage",
             maxCount: 1
+        },
+        {
+            name: "idProofImage",
+            maxCount: 1
+        },
+        {
+            name: "galleryImage",
+            maxCount: 5
         }
+
     ]),
     astrologerController.addNewAstrologer
 );

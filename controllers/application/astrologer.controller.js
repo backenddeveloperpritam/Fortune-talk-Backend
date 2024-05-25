@@ -12,9 +12,8 @@ const generateAccessAndRefereshTokens = async (astrologerId) => {
         const astrologer = await astrologerService.getAstrologerById(astrologerId)
         const accessToken = astrologer.generateAccessToken()
         const refreshToken = astrologer.generateRefreshToken()
-
-        user.refreshToken = refreshToken
-        await user.save({ validateBeforeSave: false })
+        astrologer.refreshToken = refreshToken
+        await astrologer.save({ validateBeforeSave: false })
 
         return { accessToken, refreshToken }
 
@@ -32,7 +31,6 @@ const astrologerLogin = asyncHandler(async (req, res) => {
     if (!astrologer || astrologer.length === 0) {
         throw new ApiError(httpStatus.NOT_FOUND, "Astrologer does not exist");
     }
-
     const isPasswordValid = await astrologer.isPasswordCorrect(password);
 
     if (!isPasswordValid) {
@@ -71,6 +69,19 @@ const astrologerLogin = asyncHandler(async (req, res) => {
 
 });
 
+const astrologerList = asyncHandler(async (req, res) => {
+    const title = req.query.title || "";
+
+    const result = await astrologerService.getAstrologer(title);
+
+    if (!result || result.length === 0) {
+        throw new ApiError(httpStatus.NOT_FOUND, "No Astrologer found");
+    }
+
+    return res.status(200).json(new ApiResponse(200, result, "Astrologers fetched successfully"));
+});
+
+
 const updateprofileImage = asyncHandler(async (req, res) => {
     const profileImage = req.file?.path
 
@@ -104,4 +115,4 @@ const updateprofileImage = asyncHandler(async (req, res) => {
         )
 });
 
-export { astrologerLogin };
+export { astrologerLogin, astrologerList };
