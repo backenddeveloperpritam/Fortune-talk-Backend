@@ -100,37 +100,4 @@ const astrologerList = asyncHandler(async (req, res) => {
 });
 
 
-const updateprofileImage = asyncHandler(async (req, res) => {
-    const profileImage = req.file?.path
-
-    if (!profileImage) {
-        throw new ApiError(400, "Avatar file is missing")
-    }
-
-    //TODO: delete old image - assignment
-
-    const avatar = await uploadOnCloudinary(profileImage)
-
-    if (!avatar.url) {
-        throw new ApiError(400, "Error while uploading on avatar")
-
-    }
-
-    const user = await Astrologer.findByIdAndUpdate(
-        req.user?._id,
-        {
-            $set: {
-                avatar: avatar.url
-            }
-        },
-        { new: true }
-    ).select("-password")
-
-    return res
-        .status(200)
-        .json(
-            new ApiResponse(200, user, "Avatar image updated successfully")
-        )
-});
-
 export { astrologerLogin, logoutAstrologer, astrologerList };

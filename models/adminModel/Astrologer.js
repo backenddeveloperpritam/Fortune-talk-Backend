@@ -42,7 +42,7 @@ const astrologerSchema = new mongoose.Schema({
     required: [true, 'Phone code is required']
   },
   phoneNumber: {
-    type: String,
+    type: Number,
     required: [true, 'Phone number is required']
   },
 
