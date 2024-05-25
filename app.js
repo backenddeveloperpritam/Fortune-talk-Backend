@@ -33,7 +33,7 @@ const PORT = process.env.PORT || 4000;
 app.use(express.static(__dirname));
 app.use(express.json());
 app.use(cors('*'));
-db();
+db(); 
 // // Define the API routes
 app.use("/api/app", appRoutes)
 app.use("/api/app", astroAppRoutes)
