@@ -9,6 +9,7 @@ import astroAppRoutes from "./routes/application/astrologer.routes.js"
 import blogCategoryRoute from "./routes/admin/blogCagegory.route.js";
 import astrologerRoute from "./routes/admin/astrologer.route.js";
 
+import dotenv from 'dotenv';
 
 import db from "./config/db.js";
 import cors from "cors";
@@ -20,6 +21,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+dotenv.config();
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
