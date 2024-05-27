@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 import mongoosePaginate from 'mongoose-paginate-v2';
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const capitalizeFirstLetter = (string) => {
   if (!string) return string;
@@ -39,7 +42,7 @@ const astrologerSchema = new mongoose.Schema({
     required: [true, 'Phone code is required']
   },
   phoneNumber: {
-    type: String,
+    type: Number,
     required: [true, 'Phone number is required']
   },
 

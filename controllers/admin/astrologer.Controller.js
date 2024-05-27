@@ -15,7 +15,7 @@ const astrologerList = asyncHandler(async (req, res) => {
         throw new ApiError(httpStatus.NOT_FOUND, "No Astrologer found");
     }
 
-    return res.status(200).json(new ApiResponse(200, result, "Astrologers fetched successfully"));
+    return res.status(200).json(new ApiResponse(httpStatus.OK, result, "Astrologers fetched successfully"));
 
 });
 
@@ -36,7 +36,9 @@ const getAstrologerById = asyncHandler(async (req, res) => {
 const addNewAstrologer = asyncHandler(async (req, res) => {
     try {
         const newAstrologer = await astrologerService.addNewAstrologer(req.body, req.files);
-
+        if (!newAstrologer) {
+            throw new ApiError(httpStatus.NOT_FOUND, "Astrologer Not added !");
+        }
         return res.status(200).json(new ApiResponse(200, newAstrologer, "Astrologer added successfully."));
 
     } catch (error) {

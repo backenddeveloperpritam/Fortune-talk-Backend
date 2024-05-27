@@ -7,14 +7,14 @@ import jwt from "jsonwebtoken"
 import Astrologer from "../../models/adminModel/Astrologer.js";
 
 
-const generateAccessAndRefereshTokens = async (astrologerId) => {
+const generateAccessAndRefereshTokens = async (astrologerId, fcmToken) => {
     try {
         const astrologer = await astrologerService.getAstrologerById(astrologerId)
         const accessToken = astrologer.generateAccessToken()
         const refreshToken = astrologer.generateRefreshToken()
-
-        user.refreshToken = refreshToken
-        await user.save({ validateBeforeSave: false })
+        astrologer.refreshToken = refreshToken
+        astrologer.fcmToken = fcmToken
+        await astrologer.save({ validateBeforeSave: false })
 
         return { accessToken, refreshToken }
 
@@ -32,7 +32,6 @@ const astrologerLogin = asyncHandler(async (req, res) => {
     if (!astrologer || astrologer.length === 0) {
         throw new ApiError(httpStatus.NOT_FOUND, "Astrologer does not exist");
     }
-
     const isPasswordValid = await astrologer.isPasswordCorrect(password);
 
     if (!isPasswordValid) {
@@ -43,7 +42,7 @@ const astrologerLogin = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Your account has been deactivated, please contact admin support.");
     }
 
-    const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(astrologer._id)
+    const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(astrologer._id, fcmToken)
 
     const loggedInAstrologer = await astrologerService.getAstrologerById(astrologer._id);
 
@@ -71,37 +70,33 @@ const astrologerLogin = asyncHandler(async (req, res) => {
 
 });
 
-const updateprofileImage = asyncHandler(async (req, res) => {
-    const profileImage = req.file?.path
 
-    if (!profileImage) {
-        throw new ApiError(400, "Avatar file is missing")
+const logoutAstrologer = asyncHandler(async (req, res) => {
+
+    const astrologer = await astrologerService.logoutAstrologer(req.astrologer._id);
+    const options = {
+        httpOnly: true,
+        secure: true
     }
-
-    //TODO: delete old image - assignment
-
-    const avatar = await uploadOnCloudinary(profileImage)
-
-    if (!avatar.url) {
-        throw new ApiError(400, "Error while uploading on avatar")
-
-    }
-
-    const user = await Astrologer.findByIdAndUpdate(
-        req.user?._id,
-        {
-            $set: {
-                avatar: avatar.url
-            }
-        },
-        { new: true }
-    ).select("-password")
 
     return res
         .status(200)
-        .json(
-            new ApiResponse(200, user, "Avatar image updated successfully")
-        )
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json(new ApiResponse(200, {}, "Astrologer logged Out"))
+})
+
+
+const astrologerList = asyncHandler(async (req, res) => {
+    const title = req.query.title || "";
+    const result = await astrologerService.getAstrologer(title);
+
+    if (!result || result.length === 0) {
+        throw new ApiError(httpStatus.NOT_FOUND, "No Astrologer found");
+    }
+
+    return res.status(200).json(new ApiResponse(200, result, "Astrologers fetched successfully"));
 });
 
-export { astrologerLogin };
+
+export { astrologerLogin, logoutAstrologer, astrologerList };
