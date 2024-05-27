@@ -26,19 +26,31 @@ const loginAstrologer = async (email, password) => {
 };
 
 const logoutAstrologer = async (astrologerId) => {
-    const astrologer = await Astrologer.findByIdAndUpdate(
+    await Astrologer.findByIdAndUpdate(
         astrologerId,
         {
             $unset: {
-                refreshToken: 1 // this removes the field from document
+                refreshToken: 1
+            }
+        }
+    );
+
+    const astrologer = await Astrologer.findByIdAndUpdate(
+        astrologerId,
+        {
+            $set: {
+                chat_status: "Offline",
+                call_status: "Offline"
             }
         },
         {
             new: true
         }
-    )
+    );
+
     return astrologer;
 };
+
 
 const getAstrologerById = async (id) => {
     const astrologer = await Astrologer.findOne({ _id: id }).select("-password -refreshToken");
