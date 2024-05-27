@@ -89,7 +89,6 @@ const logoutAstrologer = asyncHandler(async (req, res) => {
 
 const astrologerList = asyncHandler(async (req, res) => {
     const title = req.query.title || "";
-
     const result = await astrologerService.getAstrologer(title);
 
     if (!result || result.length === 0) {

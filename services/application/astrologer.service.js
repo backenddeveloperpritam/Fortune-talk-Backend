@@ -4,7 +4,6 @@ import Astrologer from "../../models/adminModel/Astrologer.js";
 
 const getAstrologer = async (title) => {
     try {
-        console.log("title", title)
         const titleMatch = { "displayName": { "$regex": title, "$options": "i" } };
 
         const astrologers = await Astrologer.find({
