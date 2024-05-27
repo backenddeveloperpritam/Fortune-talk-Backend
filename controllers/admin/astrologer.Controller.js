@@ -11,9 +11,9 @@ const astrologerList = asyncHandler(async (req, res) => {
 
     const result = await astrologerService.getAstrologer(title);
 
-    if (!result || result.length === 0) {
-        throw new ApiError(httpStatus.NOT_FOUND, "No Astrologer found");
-    }
+    // if (!result || result.length === 0) {
+    //     throw new ApiError(httpStatus.NOT_FOUND, "No Astrologer found");
+    // }
 
     return res.status(200).json(new ApiResponse(200, result, "Astrologers fetched successfully"));
 
