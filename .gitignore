@@ -3,4 +3,4 @@ node_modules/
 
 # Ignore .env files
 *.env
-config/service-account.js/
+config/
